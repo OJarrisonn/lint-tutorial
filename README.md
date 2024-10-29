@@ -1,14 +1,20 @@
-# Tutorial Linters
+# O que é um linter
 
-## O que é um linter
+Linters são ferramentas de análise estática de código que servem para detectar problemas semânticos do código que o compilador não pode detectar e que podem prejudicar a execução do programa ou a manutenibilidade do código. Linters possuem configurações que podem ser personalizadas para determinar como inspecionar o código através de regras e níveis assim determinando padrões de escrita de código.
 
-Linters são ferramentas de análise estática de código que servem para detectar problemas semâticos do código que o compilador não pode detectar e que podem prejudicar a execução do programa ou a manutenibilidade do código.
+Uma regra diz qual tipo de padrão o linter deve inspecionar no código. Existem regras para os mais diversos padrões, por exemplo: usar nomes `camelCase`, uso de notações de tipo (em linguagens dinâmicas), checar tamanho das funções, checagem de valores nulos, proibir uso de certos métodos, etc.
 
-Linters possuem uma configuração que pode ser personalizada para determinar como inspecionar o código através de regras e níveis.
+Para cada regra se define o nível de severidade de uma infração dessa regra, em geral os níveis são: desligado, alerta e erro. Podemos configurar uma regra para usar nomes de função `snake_case` com nível de erro. Desse modo, ao escrever um código como o baixo:
 
-Uma regra diz qual tipo de padrão o linter deve inspecionar no código. Existem regras para os mais diversos padrões, por exemplo: usar nomes `camelCase`, uso de notações de tipo (em linguagens dinâmicas), checar tamanho das funções, checagem de valores nulos, etc. 
+```js
+function DoSomething() {
+    // ...
+}
+```
 
-Para cada regra se define o nível de severidade de uma infração dessa regra, em geral os níveis são: desligado, alerta e erro. Podemos configurar uma regra para usar nomes `snake_case` com nível de erro, desse modo, assim que uma variável não atender esse padrão o linter emite um erro.
+Um linter como ESLint emitiria um erro informando que o nome da função não atende ao padrão
+
+# Configurando Linters
 
 ## Javascript ESLint
 
@@ -27,15 +33,15 @@ import js from "@eslint/js";
 
 export default [
     js.configs.recommended,
-   {
-       rules: {
-           "no-unused-vars": "warn",
-       }
-   }
+{
+    rules: {
+        "no-unused-vars": "warn",
+    }
+}
 ];
 ```
 
-Veja todas opções de [configuração](https://eslint.org/docs/latest/use/configure/) e a [lista de regras](https://eslint.org/docs/latest/rules/).
+No campo `rules` é onde são feitas as configurações de quais regras o ESLint deve adotar quando executar a verificação do seu projeto. Veja todas opções de [configuração](https://eslint.org/docs/latest/use/configure/) e a [lista de regras](https://eslint.org/docs/latest/rules/).
 
 Para executar o linter rode (na raiz do projeto):
 
@@ -46,9 +52,9 @@ npx eslint . --fix # analisa e corrige os arquivos
 
 Editores de texto tem suporte a extensões para integrar o ESLint ao seu fluxo de trabalho. A extensão ESLint do VS Code executa a análise em tempo real, mostra problemas no código e fornece ações de código para aplicar correções.
 
-## Python Pylint
+## Python Pylint ##
 
-> Referencia https://www.pylint.org/
+>Referência https://www.pylint.org/
 
 Instale o pylint disponível no PyPI
 
@@ -72,10 +78,38 @@ Para executar o linter rode (na pasta do projeto):
 pylint . # vai analisar todos arquivos no diretório atual
 ```
 
-Editores de texto tem suporte a extensões para integrar o Pyint ao seu fluxo de trabalho. A extensão Pylint do VS Code executa a análise em tempo real, mostra problemas no código e fornece ações de código para aplicar correções.
+Editores de texto tem suporte a extensões para integrar o Pylint ao seu fluxo de trabalho. A extensão Pylint do VS Code executa a análise em tempo real, mostra problemas no código e fornece ações de código para aplicar correções.
 
 ## Rust Clippy
 
+> Referência https://doc.rust-lang.org/clippy/
 
+Clippy já vem instalado como um componente na instalação padrão do Rustup. Caso não o tenha, adicione com:
 
-## Kotlin Klint
+```sh
+rustup component add clippy
+```
+
+Modifique o arquivo `Cargo.toml` do seu projeto para incluir duas novas seções:
+
+```toml
+[lints.rust]
+
+[lints.clippy]
+```
+
+O rust possui um linter nativo (bastante simples), suas regras podem ser configuradas na primeira seção. Já as regras de linting adicionadas pelo `Clippy` devem ficar na seção `[lints.clippy]` Verifique a documentação completa sobre [configuração](https://doc.rust-lang.org/clippy/configuration.html) e [regras](https://doc.rust-lang.org/clippy/lint_configuration.html).
+
+Para executar o linter rode (na pasta do projeto):
+
+```sh
+cargo clippy
+```
+
+## Kotlin Ktlint
+
+>Referência https://pinterest.github.io/ktlint/latest/
+
+Diferentemente de outros linters, o Ktlint é recomendado para ser instalado como um plugin do seu editor de texto. Para instalar o plugin no IntelliJ IDEA, vá em _File > Settings > Plugins > Marketplace_ e procure por _Ktlint_ e instale. Basicamente nenhuma configuração é necessária, o plugin já vem com as regras padrão que são recomendadas como forma de verdadeiramente padronizar o estilo de código.
+
+A verficação e formatação do código é feita automaticamente pelo plugin.
